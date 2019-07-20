@@ -1,6 +1,5 @@
-﻿body {
+﻿main {
     padding-top: 50px;
-    padding-bottom: 20px;
 }
 
 /* Set padding to keep content from hitting the edges */
@@ -21,16 +20,4 @@ input,
 select,
 textarea {
     max-width: 280px;
-}
-
-/* Set padding to display errors that occur during databinding */
-.padding-error {
-    padding-top: 20px;
-}
-
-@media only screen and (max-width: 767px) {
-    .nofloat {
-        float: none;
-        padding: 10px 15px;
-    }
 }

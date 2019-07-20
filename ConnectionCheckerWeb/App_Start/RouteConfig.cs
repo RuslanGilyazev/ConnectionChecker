@@ -5,7 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 
-namespace ConnectionCheckerWeb
+namespace ConnectionChecker
 {
     public class RouteConfig
     {
@@ -16,7 +16,13 @@ namespace ConnectionCheckerWeb
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
+                defaults: new { controller = "Connection", action = "Index", id = UrlParameter.Optional }
+            );
+
+            routes.MapRoute(
+                "404-PageNotFound",
+                "{*url}",
+                new { controller = "StaticContent", action = "PageNotFound" }
             );
         }
     }

@@ -1,0 +1,57 @@
+﻿@using ConnectionChecker.Helpers
+@using ConnectionCheckerLibrary.Service.Models
+@model ConnectionChecker.Models.ConnectionStatusViewModel
+
+
+<table class="table">
+    <thead class="thead-dark">
+    <tr>
+        <th scope="col">URL</th>
+        <th scope="col">Status</th>
+        <th scope="col">Statistic</th>
+        <th scope="col">Last Check</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model.ConnectionStatuses)
+    {
+
+        <tr class="table-@ConnectionStatusHelper.ConnectionStatusStateClass(item.ConnectionStatusState)">
+            <td>
+                @Html.Label("", item.Connection.URL)
+            </td>
+            <td>
+                @Html.Label("", item.ConnectionStatusState.ToString())
+            </td>
+
+            @if (item.ConnectionStatusState == ConnectionStatusState.Available || item.ConnectionStatusState == ConnectionStatusState.Unavailable)
+            {
+                <td>
+                    @Html.Label("",
+                        "Total: " +
+                        item.ConnectionsCount)
+                    <br/>
+                    @Html.Label("",
+                        "Good/Bad: " +
+                        item.SuccessConnectionsCount + "/" +
+                        item.BadConnectionsCount)
+                    <br/>
+                    @Html.Label("",
+                        "Percent: " +
+                        item.SuccessConnectionsPercent + "%")
+                </td>
+                <td>
+                    @Html.Label("", item.ConnectionCheckDateTime.ToString())
+                </td>
+            }
+            else
+            {
+                <td></td>
+                <td></td>
+            }
+
+        </tr>
+    }
+    </tbody>
+</table>
+

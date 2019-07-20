@@ -1,0 +1,81 @@
+﻿@using ConnectionCheckerLibrary.Service.Models
+@model ConnectionChecker.Models.ConnectionViewModel
+
+@{
+    ViewBag.Title = "View";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>View</h2>
+
+<table class="table">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col">URL</th>
+            <th scope="col">Check Delay</th>
+            <th scope="col">Enable</th>
+            <th scope="col">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Connections)
+        {
+        <tr>
+            <td>
+                @Html.Label("", item.URL.ToString())
+            </td>
+            <td>
+                @Html.Label("", item.CheckDelay.ToString())
+            </td>
+            <td>
+                @Html.Label("", item.IsOn.ToString())
+            </td>
+            <td>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-4">
+                            @if (item.IsOn)
+                            {
+                                using (Html.BeginForm("UpdateConnection", "AdminPanel", new { url = item.URL, enable = false }, FormMethod.Post))
+                                {
+                                    <input type="submit" class="btn btn-secondary btn-sm" value="Disable" />
+                                }
+                            }
+                            else
+                            {
+                                using (Html.BeginForm("UpdateConnection", "AdminPanel", new { url = item.URL, enable = true }, FormMethod.Post))
+                                {
+                                    <input type="submit" class="btn btn-success btn-sm" value="Enable" />
+                                }
+                            }
+                        </div>
+                        <div class="col-4">
+                            @using (Html.BeginForm("DeleteConnection", "AdminPanel", new { url = item.URL }, FormMethod.Post))
+                            {
+                                <input type="submit" class="btn btn-danger btn-sm" value="Delete" />
+                            }
+                        </div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        }
+    <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>
+            <div class="container">
+                <div class="row">
+                    <div class="col-4">
+                        <a href='@Url.Action("CreateConnection", "AdminPanel")'>
+                            <button type="button" class="btn btn-primary btn-sm">Add</button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </td>
+    </tr>
+    </tbody>
+</table>
+

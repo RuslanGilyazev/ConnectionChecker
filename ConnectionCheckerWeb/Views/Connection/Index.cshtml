@@ -1,0 +1,40 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Connections</h2>
+
+<div id="connection-list"></div>
+
+@section Scripts {
+    <script>
+        function UpdateConnectionStatus() {
+            $.ajax({
+                type: "GET",
+                contentType: "application/json; charset=utf-8",
+                url: "@(Url.Action("GetConnectionList", "Connection"))",
+
+                success: function(data) {
+
+                    if (data) { // check if data is defined
+                        $("#connection-list").html(data);
+                    } else {
+                        $("#connection-list").html("Sorry, but something went wrong.");
+                    }
+
+                },
+                error: function(xhr, err) {
+                    $("#connection-list").html("Sorry, but something went wrong.");
+                }
+            });
+        }
+
+        // Check server every 5 second
+        setInterval(UpdateConnectionStatus, 5000);
+
+        $(document).ready(function() {
+            UpdateConnectionStatus();
+        });
+
+    </script>
+}

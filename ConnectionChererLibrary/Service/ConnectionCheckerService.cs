@@ -82,7 +82,12 @@ namespace ConnectionCheckerLibrary.Service
         /// <summary>
         /// The _connection repository.
         /// </summary>
-        private readonly ConnectionRepository _connectionRepository;
+        private readonly IBaseRepository<Connection> _connectionRepository;
+
+        /// <summary>
+        /// The connection repository.
+        /// </summary>
+        public IBaseRepository<Connection> ConnectionRepository => _connectionRepository;
 
         /// <summary>
         /// The _connection status states.
@@ -94,10 +99,6 @@ namespace ConnectionCheckerLibrary.Service
         /// </summary>
         public ConcurrentDictionary<Connection, ConnectionStatus> ConnectionStatusStates => _connectionStatusStates;
 
-        /// <summary>
-        /// The connection repository.
-        /// </summary>
-        public ConnectionRepository ConnectionRepository => _connectionRepository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ConnectionCheckerService"/> class.
@@ -105,7 +106,7 @@ namespace ConnectionCheckerLibrary.Service
         /// <param name="connectionRepository">
         /// The connection repository.
         /// </param>
-        public ConnectionCheckerService(ConnectionRepository connectionRepository)
+        public ConnectionCheckerService(IBaseRepository<Connection> connectionRepository)
         {
             _httpClient = new HttpClient();
             _connectionRepository = connectionRepository;

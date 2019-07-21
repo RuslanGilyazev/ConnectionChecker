@@ -62,7 +62,6 @@
     <Compile Include="DataBase\Context\ConnectionCheckerDbContext.cs" />
     <Compile Include="DataBase\Context\ConnectionCheckerDbInitializer.cs" />
     <Compile Include="DataBase\Models\Connection.cs" />
-    <Compile Include="DataBase\Repository\ConnectionRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service\Models\ConnectionStatus.cs" />
     <Compile Include="Service\UpdateStatusOfConnectionEventsArgs.cs" />

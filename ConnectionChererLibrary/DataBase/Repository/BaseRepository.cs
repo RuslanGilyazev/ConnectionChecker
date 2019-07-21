@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.Entity;
+using System.Linq;
+using System.Linq.Expressions;
 
 namespace ConnectionCheckerLibrary.DataBase.Repository
 {
@@ -9,14 +12,25 @@ namespace ConnectionCheckerLibrary.DataBase.Repository
     /// <typeparam name="T">
     /// </typeparam>
     public interface IBaseRepository<T>
+    where T : class
     {
+        /// <summary>
+        /// Gets or sets the db context.
+        /// </summary>
+        DbContext DbContext { get; set; }
+
+        /// <summary>
+        /// Gets or sets the db set.
+        /// </summary>
+        DbSet<T> DbSet { get; set; }
+
         /// <summary>
         /// The get all.
         /// </summary>
         /// <returns>
         /// The <see cref="IEnumerable"/>.
         /// </returns>
-        IEnumerable<T> GetAll();
+        IList<T> GetAll();
 
         /// <summary>
         /// The get by id.
@@ -38,14 +52,6 @@ namespace ConnectionCheckerLibrary.DataBase.Repository
         void Insert(T newInstance);
 
         /// <summary>
-        /// The update.
-        /// </summary>
-        /// <param name="existInstance">
-        /// The exist instance.
-        /// </param>
-        void Update(T existInstance);
-
-        /// <summary>
         /// The delete.
         /// </summary>
         /// <param name="key">
@@ -64,17 +70,33 @@ namespace ConnectionCheckerLibrary.DataBase.Repository
     /// </summary>
     /// <typeparam name="T">
     /// </typeparam>
-    public abstract class BaseRepository<T> : DbSet<T>, IBaseRepository<T>
+    public class BaseRepository<T> : IBaseRepository<T>
+        where T : class
     {
         /// <summary>
         /// The _db context.
         /// </summary>
-        private readonly DbContext _dbContext;
+        private DbContext _dbContext;
+
+        public DbContext DbContext
+        {
+            get => _dbContext;
+            set => _dbContext = value;
+        }
 
         /// <summary>
-        /// The db context.
+        /// The _db set.
         /// </summary>
-        public DbContext DbContext => _dbContext;
+        protected DbSet<T> _dbSet;
+
+        /// <summary>
+        /// Gets or sets the db set.
+        /// </summary>
+        public DbSet<T> DbSet
+        {
+            get => _dbSet;
+            set => _dbSet = value;
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BaseRepository{T}"/> class.
@@ -82,18 +104,18 @@ namespace ConnectionCheckerLibrary.DataBase.Repository
         /// <param name="context">
         /// The context.
         /// </param>
-        protected BaseRepository(DbContext context)
+        public BaseRepository(DbContext context)
         {
             _dbContext = context;
+            _dbSet = context.Set<T>();
         }
 
         /// <summary>
-        /// The get all.
+        /// Initializes a new instance of the <see cref="BaseRepository{T}"/> class.
         /// </summary>
-        /// <returns>
-        /// The <see cref="IEnumerable"/>.
-        /// </returns>
-        public abstract IEnumerable<T> GetAll();
+        public BaseRepository()
+        {
+        }
 
         /// <summary>
         /// The get by id.
@@ -104,23 +126,21 @@ namespace ConnectionCheckerLibrary.DataBase.Repository
         /// <returns>
         /// The <see cref="T"/>.
         /// </returns>
-        public abstract T GetById(params object[] key);
+        public T GetById(params object[] key)
+        {
+            return DbSet.Find(key);
+        }
 
         /// <summary>
         /// The insert.
         /// </summary>
-        /// <param name="newInstance">
-        /// The new instance.
+        /// <param name="entity">
+        /// The entity.
         /// </param>
-        public abstract void Insert(T newInstance);
-
-        /// <summary>
-        /// The update.
-        /// </summary>
-        /// <param name="existInstance">
-        /// The exist instance.
-        /// </param>
-        public abstract void Update(T existInstance);
+        public void Insert(T entity)
+        {
+            DbSet.Add(entity);
+        }
 
         /// <summary>
         /// The delete.
@@ -128,7 +148,46 @@ namespace ConnectionCheckerLibrary.DataBase.Repository
         /// <param name="key">
         /// The key.
         /// </param>
-        public abstract void Delete(params object[] key);
+        public void Delete(params object[] key)
+        {
+            Delete(GetById(key));
+        }
+
+        /// <summary>
+        /// The delete.
+        /// </summary>
+        /// <param name="entity">
+        /// The entity.
+        /// </param>
+        public void Delete(T entity)
+        {
+            DbSet.Remove(entity);
+        }
+
+        /// <summary>
+        /// The get all.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IList"/>.
+        /// </returns>
+        public IList<T> GetAll()
+        {
+            return DbSet.ToList();
+        }
+
+        /// <summary>
+        /// The get by id.
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="T"/>.
+        /// </returns>
+        public T GetById(int id)
+        {
+            return DbSet.Find(id);
+        }
 
         /// <summary>
         /// The save.

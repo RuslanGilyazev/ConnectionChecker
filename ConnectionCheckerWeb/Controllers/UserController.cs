@@ -1,21 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using ConnectionChecker.Infrastructure;
 using ConnectionChecker.Models;
 using ConnectionCheckerLibrary.DataBase.Models;
-using ConnectionCheckerLibrary.DataBase.Repository;
+
 using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 
 namespace ConnectionChecker.Controllers
 {
+    /// <summary>
+    /// The user controller.
+    /// </summary>
     public class UserController : Controller
     {
+        /// <summary>
+        /// The login.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
         public ActionResult Login()
         {
             if (User.Identity.IsAuthenticated)
@@ -30,6 +36,12 @@ namespace ConnectionChecker.Controllers
             }
         }
 
+        /// <summary>
+        /// The sign out.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
         public ActionResult SignOut()
         {
             Request.GetOwinContext()
@@ -41,6 +53,15 @@ namespace ConnectionChecker.Controllers
             return Redirect(Url.Action("Index", "Connection"));
         }
 
+        /// <summary>
+        /// The login.
+        /// </summary>
+        /// <param name="login">
+        /// The login.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
         [HttpPost]
         public ActionResult Login(LoginViewModel login)
         {

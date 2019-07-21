@@ -1,16 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data.Entity;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 using ConnectionCheckerLibrary.DataBase.Models;
 using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace ConnectionCheckerLibrary.DataBase.Context
 {
+    /// <summary>
+    /// The application user db context.
+    /// </summary>
     public class ApplicationUserDbContext : IdentityDbContext<ApplicationUser>, IDisposable
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ApplicationUserDbContext"/> class.
+        /// </summary>
         public ApplicationUserDbContext() : base("ConnectionChecker")
         {
             Database.SetInitializer(new ApplicationUserDbInitializer());

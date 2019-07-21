@@ -1,17 +1,24 @@
 ﻿using ConnectionChecker.Infrastructure;
 using ConnectionCheckerLibrary.DataBase.Context;
-using ConnectionCheckerLibrary.DataBase.Models;
-using ConnectionCheckerLibrary.DataBase.Repository;
+
 using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Owin;
 using Microsoft.Owin.Security.Cookies;
 using Owin;
 
 namespace ConnectionChecker
 {
+    /// <summary>
+    /// The identity config.
+    /// </summary>
     public class IdentityConfig
     {
+        /// <summary>
+        /// The configuration.
+        /// </summary>
+        /// <param name="app">
+        /// The app.
+        /// </param>
         public void Configuration(IAppBuilder app)
         {
             app.CreatePerOwinContext(() => new ApplicationUserDbContext());

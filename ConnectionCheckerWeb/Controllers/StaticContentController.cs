@@ -1,13 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 
 namespace ConnectionChecker.Controllers
 {
+    /// <summary>
+    /// The static content controller.
+    /// </summary>
     public class StaticContentController : Controller
     {
+        /// <summary>
+        /// The page not found.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
         public ActionResult PageNotFound()
         {
             return View();

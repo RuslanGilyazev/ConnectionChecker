@@ -1,20 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data.Entity;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 using ConnectionCheckerLibrary.DataBase.Models;
 
 namespace ConnectionCheckerLibrary.DataBase.Context
 {
+    /// <summary>
+    /// The connection checker db initializer.
+    /// </summary>
     public class ConnectionCheckerDbInitializer : CreateDatabaseIfNotExists<ConnectionCheckerDbContext>
     {
         /// <summary>
-        /// A method that should be overridden to actually add data to the context for seeding.
-        /// The default implementation does nothing.
+        /// Generate the database fields
         /// </summary>
-        /// <param name="context"> The context to seed. </param>
+        /// <param name="context">
+        /// The context.
+        /// </param>
         protected override void Seed(ConnectionCheckerDbContext context)
         {
             GetConnections().ForEach(connection => context.Connection.Add(connection));
@@ -23,6 +24,12 @@ namespace ConnectionCheckerLibrary.DataBase.Context
             base.Seed(context);
         }
 
+        /// <summary>
+        /// The get connections.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="List"/>.
+        /// </returns>
         public List<Connection> GetConnections()
         {
             return new List<Connection>()

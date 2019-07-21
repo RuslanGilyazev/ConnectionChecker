@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
-using System.Web;
 using System.Web.Mvc;
 using ConnectionChecker.Models;
 using ConnectionCheckerLibrary.DataBase.Models;
@@ -12,24 +9,53 @@ using ConnectionCheckerLibrary.Service.Models;
 
 namespace ConnectionChecker.Controllers
 {
+    /// <summary>
+    /// The connection controller.
+    /// </summary>
     public class ConnectionController : Controller
     {
+        /// <summary>
+        /// The connection repository.
+        /// </summary>
         private ConnectionRepository _connectionRepository;
+
+        /// <summary>
+        /// The connection checker service.
+        /// </summary>
         private IConnectionCheckerService _connectionCheckerService;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ConnectionController"/> class.
+        /// </summary>
+        /// <param name="connectionRepository">
+        /// The connection repository.
+        /// </param>
+        /// <param name="connectionCheckerService">
+        /// The connection checker service.
+        /// </param>
         public ConnectionController(ConnectionRepository connectionRepository, IConnectionCheckerService connectionCheckerService)
         {
             _connectionRepository = connectionRepository;
             _connectionCheckerService = connectionCheckerService;
         }
 
-        // GET: Connection
+        /// <summary>
+        /// The main page of connections.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
         public ActionResult Index()
         {
             return View();
         }
 
-
+        /// <summary>
+        /// The get connection list.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
         [HttpGet]
         public ActionResult GetConnectionList()
         {

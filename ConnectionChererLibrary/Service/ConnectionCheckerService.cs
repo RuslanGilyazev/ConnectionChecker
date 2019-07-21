@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading;
@@ -11,47 +10,115 @@ using ConnectionCheckerLibrary.Service.Models;
 
 namespace ConnectionCheckerLibrary.Service
 {
+    /// <summary>
+    /// The ConnectionCheckerService interface.
+    /// </summary>
     public interface IConnectionCheckerService
     {
+        /// <summary>
+        /// Gets the connection status states.
+        /// </summary>
         ConcurrentDictionary<Connection, ConnectionStatus> ConnectionStatusStates { get; }
 
+        /// <summary>
+        /// The update status of connection event.
+        /// </summary>
         event ConnectionCheckerService.UpdateStatusOfConnection UpdateStatusOfConnectionEvent;
 
-        void StartConnectionChecking(CancellationToken cancellationToken);
+        /// <summary>
+        /// The start connection checking.
+        /// </summary>
+        /// <param name="cancellationToken">
+        /// The cancellation token.
+        /// </param>
+        void StartConnectionCheck(CancellationToken cancellationToken);
 
+        /// <summary>
+        /// The start connection check for the specific connection
+        /// </summary>
+        /// <param name="connection">
+        /// The connection.
+        /// </param>
+        /// <param name="token">
+        /// The token.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Task"/>.
+        /// </returns>
         Task StartConnectionCheck(Connection connection, CancellationToken token = default);
 
-        void StartConnectionCheckAsync(Connection connection, CancellationToken token = default);
-
+        /// <summary>
+        /// The remove connection.
+        /// </summary>
+        /// <param name="connection">
+        /// The connection.
+        /// </param>
         void RemoveConnection(Connection connection);
     }
 
+    /// <summary>
+    /// The connection checker service.
+    /// </summary>
     public class ConnectionCheckerService : IConnectionCheckerService
     {
+        /// <summary>
+        /// The update status of connection.
+        /// </summary>
+        /// <param name="eventsArgs">
+        /// The events args.
+        /// </param>
         public delegate void UpdateStatusOfConnection(UpdateStatusOfConnectionEventsArgs eventsArgs);
 
+        /// <summary>
+        /// The update status of connection event.
+        /// </summary>
         public event UpdateStatusOfConnection UpdateStatusOfConnectionEvent;
 
+        /// <summary>
+        /// The http client.
+        /// </summary>
         private readonly HttpClient _httpClient;
 
+        /// <summary>
+        /// The _connection repository.
+        /// </summary>
         private readonly ConnectionRepository _connectionRepository;
 
+        /// <summary>
+        /// The _connection status states.
+        /// </summary>
         private ConcurrentDictionary<Connection, ConnectionStatus> _connectionStatusStates;
 
+        /// <summary>
+        /// The connection status states.
+        /// </summary>
         public ConcurrentDictionary<Connection, ConnectionStatus> ConnectionStatusStates => _connectionStatusStates;
 
+        /// <summary>
+        /// The connection repository.
+        /// </summary>
         public ConnectionRepository ConnectionRepository => _connectionRepository;
 
-        private object locker = new object();
-
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ConnectionCheckerService"/> class.
+        /// </summary>
+        /// <param name="connectionRepository">
+        /// The connection repository.
+        /// </param>
         public ConnectionCheckerService(ConnectionRepository connectionRepository)
         {
-            _httpClient =  new HttpClient();
+            _httpClient = new HttpClient();
             _connectionRepository = connectionRepository;
             _connectionStatusStates = new ConcurrentDictionary<Connection, ConnectionStatus>();
         }
 
-        public void StartConnectionChecking(CancellationToken token = default)
+        /// <summary>
+        /// The start connection checking.
+        /// </summary>
+        /// <param name="token">
+        /// The token.
+        /// </param>
+        public void StartConnectionCheck(CancellationToken token = default)
         {
             _connectionRepository.GetAll().ToList().ForEach(connection =>
             {
@@ -59,6 +126,18 @@ namespace ConnectionCheckerLibrary.Service
             });
         }
 
+        /// <summary>
+        /// The start connection check.
+        /// </summary>
+        /// <param name="connection">
+        /// The connection.
+        /// </param>
+        /// <param name="token">
+        /// The token.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Task"/>.
+        /// </returns>
         public Task StartConnectionCheck(Connection connection, CancellationToken token = default)
         {
             ConnectionStatus connectionStatus = _connectionStatusStates.GetOrAdd(connection, new ConnectionStatus());
@@ -69,6 +148,15 @@ namespace ConnectionCheckerLibrary.Service
             return Task.Run(() => StartConnectionCheckAsync(connection, token), token);
         }
 
+        /// <summary>
+        /// The start connection check async.
+        /// </summary>
+        /// <param name="connection">
+        /// The connection.
+        /// </param>
+        /// <param name="token">
+        /// The token.
+        /// </param>
         public async void StartConnectionCheckAsync(Connection connection, CancellationToken token = default)
         {
             while (!token.IsCancellationRequested || connection != null)
@@ -102,6 +190,12 @@ namespace ConnectionCheckerLibrary.Service
             }
         }
 
+        /// <summary>
+        /// The remove connection.
+        /// </summary>
+        /// <param name="connection">
+        /// The connection.
+        /// </param>
         public void RemoveConnection(Connection connection)
         {
             ConnectionStatus connectionStatus;
@@ -113,6 +207,15 @@ namespace ConnectionCheckerLibrary.Service
             }
         }
 
+        /// <summary>
+        /// The check connection status async.
+        /// </summary>
+        /// <param name="connection">
+        /// The connection.
+        /// </param>
+        /// <param name="token">
+        /// The token.
+        /// </param>
         public async void CheckConnectionStatusAsync(Connection connection, CancellationToken token = default)
         {
             string result = null;
@@ -152,6 +255,12 @@ namespace ConnectionCheckerLibrary.Service
             OnUpdatedStatusOfConnectionEvent(new UpdateStatusOfConnectionEventsArgs() { ConnectionStatus = connectionStatus });
         }
 
+        /// <summary>
+        /// The on updated status of connection event.
+        /// </summary>
+        /// <param name="eventsArgs">
+        /// The events args.
+        /// </param>
         protected virtual void OnUpdatedStatusOfConnectionEvent(UpdateStatusOfConnectionEventsArgs eventsArgs)
         {
             UpdateStatusOfConnectionEvent?.Invoke(eventsArgs);

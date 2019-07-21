@@ -58,7 +58,7 @@ namespace ConnectionChecker.Infrastructure
                         _kernel.Get<ConnectionRepository>(), 
                         false));
 
-            _kernel.Get<IConnectionCheckerService>().StartConnectionChecking(CancellationToken.None);
+            _kernel.Get<IConnectionCheckerService>().StartConnectionCheck(CancellationToken.None);
         }
     }
 }

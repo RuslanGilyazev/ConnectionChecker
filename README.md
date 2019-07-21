@@ -6,6 +6,12 @@ Simple connection checker (ASP.NET MVC 5, EF and AJAX)
 - Checking of connection to websites in updatable grid
 - Admin panel with editing functionality
 
+### Docker
+
+https://hub.docker.com/r/syswow128/connectionchecker
+
+Docker container is not yet ready :( 
+
 ### Screenshots
 
 Connections page:

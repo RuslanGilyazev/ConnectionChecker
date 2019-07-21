@@ -14,9 +14,6 @@ namespace ConnectionCheckerLibrary.DataBase.Context
         public ApplicationUserDbContext() : base("ConnectionChecker")
         {
             Database.SetInitializer(new ApplicationUserDbInitializer());
-            //Database.Initialize(true);
-
-            Database.CreateIfNotExists();
         }
     }
 }

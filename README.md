@@ -9,13 +9,13 @@ Simple connection checker (ASP.NET MVC 5, EF and AJAX)
 ### Screenshots
 
 Connections page:
-(https://ibb.co/xHPdmC9)
+![](https://i.ibb.co/9tzSw8K/1.png)
 
 Login page:
-(https://ibb.co/v49n2Qm)
+![](https://i.ibb.co/JjZJXy2/2.png)
 
 Admin panel:
-(https://ibb.co/PNBtbjw)
+![](https://i.ibb.co/47BJDtP/3.png)
 
 New connection panel:
-(https://ibb.co/ZGyQ8bt)
+![](https://i.ibb.co/8NFy5QT/4.png)

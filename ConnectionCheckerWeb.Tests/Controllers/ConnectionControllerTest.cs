@@ -24,6 +24,22 @@ namespace ConnectionChecker.Tests.Controllers
     public class ConnectionControllerTest : BaseControllerTest
     {
         /// <summary>
+        /// The _connection controller.
+        /// </summary>
+        protected ConnectionController _connectionController;
+
+        /// <summary>
+        /// The test initialize.
+        /// </summary>
+        [TestInitialize]
+        public override void TestInitialize()
+        {
+            base.TestInitialize();
+
+            _connectionController = new ConnectionController(_connectionRepository, _connectionCheckerService);
+        }
+
+        /// <summary>
         /// The test index view.
         /// </summary>
         [TestMethod]

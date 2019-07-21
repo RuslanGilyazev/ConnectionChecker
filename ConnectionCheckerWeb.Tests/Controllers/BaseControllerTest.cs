@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using System.Security.Principal;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web.Mvc;
 
 using ConnectionChecker.Controllers;
 
@@ -27,11 +29,6 @@ namespace ConnectionChecker.Tests.Controllers
         protected ConnectionCheckerService _connectionCheckerService;
 
         /// <summary>
-        /// The _connection controller.
-        /// </summary>
-        protected ConnectionController _connectionController;
-
-        /// <summary>
         /// The connection repository.
         /// </summary>
         protected IBaseRepository<Connection> _connectionRepository;
@@ -40,7 +37,7 @@ namespace ConnectionChecker.Tests.Controllers
         /// The test initialize.
         /// </summary>
         [TestInitialize]
-        public void TestInitialize()
+        public virtual void TestInitialize()
         {
             _connectionRepository = new BaseRepository<Connection>();
             Mock<DbSet<Connection>> mockConnectionDbSet = new Mock<DbSet<Connection>>() { CallBase = true };
@@ -57,8 +54,29 @@ namespace ConnectionChecker.Tests.Controllers
 
             _connectionCheckerService = new ConnectionCheckerService(_connectionRepository);
             _connectionCheckerService.StartConnectionCheck(CancellationToken.None);
+        }
 
-            _connectionController = new ConnectionController(_connectionRepository, _connectionCheckerService);
+        /// <summary>
+        /// The user authenticate.
+        /// </summary>
+        /// <param name="controller">
+        /// The controller.
+        /// </param>
+        public void UserAuthenticate(Controller controller)
+        {
+            // create mock controller context
+            var mocks = new MockRepository(MockBehavior.Default);
+            Mock<IPrincipal> mockPrincipal = mocks.Create<IPrincipal>();
+            mockPrincipal.SetupGet(p => p.Identity.Name).Returns("User");
+            mockPrincipal.SetupGet(p => p.Identity.IsAuthenticated).Returns(true);
+            mockPrincipal.Setup(p => p.IsInRole("User")).Returns(true);
+
+            var mockContext = new Mock<ControllerContext>();
+            mockContext.SetupGet(p => p.HttpContext.User).Returns(mockPrincipal.Object);
+            mockContext.SetupGet(p => p.HttpContext.Request.IsAuthenticated).Returns(true);
+
+
+            controller.ControllerContext = mockContext.Object;
         }
     }
 }

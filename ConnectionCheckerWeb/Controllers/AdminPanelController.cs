@@ -16,7 +16,7 @@ namespace ConnectionChecker.Controllers
         /// <summary>
         /// The connection repository.
         /// </summary>
-        private ConnectionRepository _connectionRepository;
+        private IBaseRepository<Connection> _connectionRepository;
 
         /// <summary>
         /// The connection checker service.
@@ -32,7 +32,7 @@ namespace ConnectionChecker.Controllers
         /// <param name="connectionCheckerService">
         /// The connection checker service.
         /// </param>
-        public AdminPanelController(ConnectionRepository connectionRepository, IConnectionCheckerService connectionCheckerService)
+        public AdminPanelController(IBaseRepository<Connection> connectionRepository, IConnectionCheckerService connectionCheckerService)
         {
             _connectionRepository = connectionRepository;
             _connectionCheckerService = connectionCheckerService;

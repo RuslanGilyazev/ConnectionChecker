@@ -1,6 +1,9 @@
 # ConnectionChecker
 Simple connection checker (ASP.NET MVC 5, EF and AJAX)
 
+User: Admin
+Password: 123456
+
 ### Features
 
 - Checking of connection to websites in updatable grid
